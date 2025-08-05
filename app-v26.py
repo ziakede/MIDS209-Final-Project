@@ -41,18 +41,17 @@ tab2, tab1, tab3, tab4, tab5, about_tab, creators_tab = st.tabs(["Map", "Time Se
 
 with tab1:
     st.subheader("Incidents Over Time by Category")
+    st.info("The line chart shows how the volume of each incident type changes through time in different neighborhoods.\n\n**Instruction:** Select the incident category and neighborhood in the dropdown.")
     category_options = ['All'] + sorted(df['Incident Category'].unique())
     col1, col2 = st.columns([1,1])
     with col1:
         selected_category = st.selectbox("Select Incident Category", category_options)
-    
     with col2:
         selected_neighborhood_ts = st.selectbox("Select Neighborhood", ['All'] + sorted(df['Analysis Neighborhood'].unique()), key='neigh_select_tab1')
 
     df_filtered = df
     if selected_category != 'All':
         df_filtered = df_filtered[df_filtered['Incident Category'] == selected_category]
-    
     if selected_neighborhood_ts != 'All':
         df_filtered = df_filtered[df_filtered['Analysis Neighborhood'] == selected_neighborhood_ts]
 
@@ -65,11 +64,7 @@ with tab1:
             x=alt.X('date:T', title='Month'),
             y=alt.Y('count:Q', title='Incident Count'),
             color=alt.Color('Incident Category:N'),
-            tooltip=[
-                alt.Tooltip('date:T', title='Month'),
-                alt.Tooltip('Incident Category:N'),
-                alt.Tooltip('count:Q', title='Count')
-            ]
+            tooltip=[alt.Tooltip('date:T', title='Month'), alt.Tooltip('Incident Category:N'), alt.Tooltip('count:Q', title='Count')]
         )
         .properties(width=800, height=400)
     )
@@ -77,8 +72,8 @@ with tab1:
     st.altair_chart(chart, use_container_width=True)
 
 with tab2:
-    st.subheader("San Francisco Crime Heatmap Explorer")
-
+    st.subheader("Incident Bubble Map")
+    st.info("Each bubble represents one count of incident. Discover how crime moves across the city through time.\n\n**Instruction:** Select the year, month, and day of your desired view. Adjust the hour slider to see each incident.")
     selected_year_heatmap = st.selectbox("Select Year", sorted(df['year'].unique()), index=sorted(df['year'].unique()).index(2025), key='year_select_heatmap')
     month_options = ['All'] + sorted(df['month'].unique())
     selected_month = st.selectbox("Select Month", month_options, key='month_select_heatmap')
@@ -111,7 +106,7 @@ with tab2:
         longitude='Longitude:Q',
         latitude='Latitude:Q',
         size=alt.Size('count()', scale=alt.Scale(range=[0, 1000])),
-        color=alt.Color('count()', scale=alt.Scale(scheme='redyellowblue')),
+        color=alt.Color('count()', scale=alt.Scale(scheme='redyellowblue'), legend=None),
         tooltip=[
             alt.Tooltip('Incident Category:N', title='Category'),
             alt.Tooltip('Analysis Neighborhood:N', title='Neighborhood'),
@@ -141,9 +136,9 @@ with tab2:
         x='date:T', y='count:Q'
     ).properties(width=700, height=300)
     st.altair_chart(line)
-    
 
 with tab3:
+    st.info("The bar chart shows how the volume of incidents changes through the week at different hours across police districts.\n\n**Instruction:** Select the police district and adjust the hour of the day with the slider.")
     col1, col2 = st.columns([1, 3])
     with col1:
         selected_hour = st.slider("Hour of Day", 0, 23, 12, key='hour_slider_tab5')
@@ -163,8 +158,12 @@ with tab4:
     col1, col2 = st.columns([1, 3])
     with col1:
         selected_year = st.selectbox("Select Year", sorted(df['year'].unique()), key='year_select_tab4')
+        incident_category_filter = st.selectbox("Filter by Incident Category", ['All'] + sorted(df['Incident Category'].unique()), key='incident_cat_filter_tab4')
     with col2:
         df_cat = df[df['year'] == selected_year]
+        if incident_category_filter != 'All':
+            df_cat = df_cat[df_cat['Incident Category'] == incident_category_filter]
+
         st.subheader(f"Incident Categories in {selected_year}")
         cat_counts = df_cat['Incident Category'].value_counts().reset_index()
         cat_counts.columns = ['Incident Category', 'count']
@@ -202,6 +201,7 @@ with creators_tab:
 
 with tab5:
     st.subheader("Neighborhood Comparison")
+    st.info("The bar charts show the distribution of incident categories in different neighborhoods, allowing direct comparison.\n\n**Instruction:** Select two neighborhoods in the dropdown to compare.")
     col1, col2 = st.columns([1, 1])
     with col1:
         neigh1 = st.selectbox("Neighborhood 1", sorted(df['Analysis Neighborhood'].unique()), key='neigh1_select_tab5')
