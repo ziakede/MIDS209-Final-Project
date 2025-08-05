@@ -155,6 +155,8 @@ with tab3:
         st.altair_chart(day_chart)
 
 with tab4:
+    st.subheader("Category and Resolution Overview")
+    st.info("This section explores the distribution of incident categories and how resolutions vary across police districts.\n\n**Instruction:** Select a year and optionally filter by incident category to see the breakdown of cases and their resolution status across different districts.")
     col1, col2 = st.columns([1, 3])
     with col1:
         selected_year = st.selectbox("Select Year", sorted(df['year'].unique()), key='year_select_tab4')
@@ -189,6 +191,8 @@ with about_tab:
     This dashboard provides an interactive exploration of San Francisco Police Incident Reports, enabling users to examine crime trends across neighborhoods, time periods, and incident categories.
 
     Designed for data-driven storytelling, it combines heatmaps, time series trends, category breakdowns, and resolution rates to uncover spatial and temporal crime patterns.
+
+    **Data Source:** [San Francisco Police Department Incident Reports](https://data.sfgov.org/Public-Safety/Police-Department-Incident-Reports-2018-to-Present/wg3w-h783/about_data)
     """)
 
 with creators_tab:
