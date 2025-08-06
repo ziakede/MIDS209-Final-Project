@@ -196,12 +196,19 @@ with about_tab:
     """)
 
 with creators_tab:
-    st.header("Creators")
-    st.markdown("""
-    **Zia Williams**  
-    **Brandon Zhou**  
-    Developed as part of a visualization project to explore public safety data with accessible and actionable insights.
-    """)
+    st.header("Creators") 
+    col1, col2 = st.columns([1, 1])
+
+    with col1:
+        st.image("img_brandon.jpeg", caption="Brandon Zhou", width=200)
+        st.markdown("**Brandon Tzou**  \nCo-creator")
+
+    with col2:
+        st.image("img_zia.jpeg", caption="Zia Williams", width=200)
+        st.markdown("**Zia Williams**  \nCo-creator")
+    
+    st.markdown("""Developed as part of a visualization project to explore public safety data with accessible and actionable insights.""")
+    
 
 with tab5:
     st.subheader("Neighborhood Comparison")
