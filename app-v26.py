@@ -200,7 +200,7 @@ with creators_tab:
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        st.image("img_brandon.jpeg", caption="Brandon Zhou", width=200)
+        st.image("img_brandon.jpeg", caption="Brandon Tzou", width=200)
         st.markdown("**Brandon Tzou**  \nCo-creator")
 
     with col2:
